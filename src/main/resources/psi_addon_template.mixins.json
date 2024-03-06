@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.qther.psi_addon_template.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "psi-addon-template.refmap.json",
+  "mixins": [
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
