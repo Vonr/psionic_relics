@@ -1,5 +1,6 @@
 package dev.qther.psionic_relics.mixin;
 
+import dev.qther.psionic_relics.item.base.IRelic;
 import dev.qther.psionic_relics.item.base.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundSource;
@@ -28,7 +29,7 @@ public class MixinBlockProgrammer {
             locals = LocalCapture.CAPTURE_FAILHARD
     )
     public void checkSetSpell(Level worldIn, BlockPos pos, Player playerIn, ItemStack heldItem, CallbackInfoReturnable<InteractionResult> cir) {
-        if (heldItem.getItem().getClass().getPackageName().equals("dev.qther.psionic_relics.item.relic") && ISpellAcceptor.acceptor(heldItem).containsSpell()) {
+        if (heldItem.getItem() instanceof IRelic && ISpellAcceptor.acceptor(heldItem).containsSpell()) {
             if (!worldIn.isClientSide) {
                 worldIn.playSound((Player) null, (double) pos.getX() + 0.5, (double) pos.getY() + 0.5, (double) pos.getZ() + 0.5, PsiSoundHandler.compileError, SoundSource.BLOCKS, 0.5F, 1.0F);
             }

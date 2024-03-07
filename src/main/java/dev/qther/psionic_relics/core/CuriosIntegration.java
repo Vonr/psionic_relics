@@ -35,6 +35,7 @@ public class CuriosIntegration {
     @OnlyIn(Dist.CLIENT)
     public class KeybindHandler {
         public static KeyMapping cast = new KeyMapping("key.psionic_relics.cast", GLFW_KEY_R, "key.categories.psionic_relics");
+        protected static boolean castWasDown = false;
         protected static int castDebounce = 0;
 
         public static void init() {
@@ -67,9 +68,14 @@ public class CuriosIntegration {
                     return;
                 }
 
-                castDebounce = 1;
+                if (!KeybindHandler.castWasDown) {
+                    castDebounce = 2;
+                    KeybindHandler.castWasDown = true;
+                }
+
                 MessageRegistry.HANDLER.sendToServer(new MessageRelicCast());
             } else {
+                KeybindHandler.castWasDown = false;
                 castDebounce = 0;
             }
         }

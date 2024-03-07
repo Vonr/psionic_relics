@@ -1,6 +1,7 @@
 package dev.qther.psionic_relics.core;
 
 import com.google.gson.JsonObject;
+import dev.qther.psionic_relics.item.base.IRelic;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
@@ -33,7 +34,7 @@ public class RelicLootModifier extends LootModifier {
 
         var hasRelic = false;
         for (var stack : loot) {
-            if (stack.getItem().getClass().getPackageName().equals("dev.qther.psionic_relics.item.relic")) {
+            if (stack.getItem() instanceof IRelic) {
                 hasRelic = true;
                 break;
             }
