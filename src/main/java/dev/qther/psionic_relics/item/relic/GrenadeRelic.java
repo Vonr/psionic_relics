@@ -74,8 +74,9 @@ public class GrenadeRelic extends Item implements IRelic {
         });
     }
 
-    public double getCostModifier() {
-        return ((ItemGrenadeSpellBullet) ModItems.grenadeSpellBullet).getCostModifier(ModItems.grenadeSpellBullet.getDefaultInstance());
+    @Override
+    public ItemSpellBullet getBulletType() {
+        return (ItemSpellBullet) ModItems.grenadeSpellBullet;
     }
 
     public class GrenadeRelicBase extends RelicBase {

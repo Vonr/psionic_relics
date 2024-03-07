@@ -46,7 +46,7 @@ public class BasicRelic extends Item implements IRelic {
     @Nonnull
     @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, @Nonnull InteractionHand hand) {
-        return this.relicUse(worldIn, playerIn, hand, 0, 0, (ItemSpellBullet) ModItems.spellBullet);
+        return this.relicUse(worldIn, playerIn, hand, 0, 0, this.getBulletType());
     }
 
     @Override
@@ -62,5 +62,10 @@ public class BasicRelic extends Item implements IRelic {
             tooltip.add(new TranslatableComponent("psimisc.bullet_cost", 100));
             tooltip.add(new TextComponent("\u00a7b" + new TranslatableComponent("psi.cadstat.efficiency").getString()).append("\u00a77: \u00a7r100"));
         });
+    }
+
+    @Override
+    public ItemSpellBullet getBulletType() {
+        return (ItemSpellBullet) ModItems.spellBullet;
     }
 }

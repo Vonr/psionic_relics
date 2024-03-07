@@ -74,8 +74,9 @@ public class MineRelic extends Item implements IRelic {
         });
     }
 
-    public double getCostModifier() {
-        return ((ItemMineSpellBullet) ModItems.mineSpellBullet).getCostModifier(ModItems.mineSpellBullet.getDefaultInstance());
+    @Override
+    public ItemSpellBullet getBulletType() {
+        return (ItemSpellBullet) ModItems.mineSpellBullet;
     }
 
     public class MineRelicBase extends RelicBase {

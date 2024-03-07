@@ -1,0 +1,11 @@
+{
+  "values": [
+    "psionic_relics:basic_relic",
+    "psionic_relics:charge_relic",
+    "psionic_relics:circle_relic",
+    "psionic_relics:grenade_relic",
+    "psionic_relics:loopcast_relic",
+    "psionic_relics:mine_relic",
+    "psionic_relics:projectile_relic"
+  ]
+}

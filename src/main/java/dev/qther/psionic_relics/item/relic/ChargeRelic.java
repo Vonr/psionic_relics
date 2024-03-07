@@ -74,8 +74,9 @@ public class ChargeRelic extends Item implements IRelic {
         });
     }
 
-    public double getCostModifier() {
-        return ((ItemChargeSpellBullet) ModItems.chargeSpellBullet).getCostModifier(ModItems.chargeSpellBullet.getDefaultInstance());
+    @Override
+    public ItemSpellBullet getBulletType() {
+        return (ItemSpellBullet) ModItems.chargeSpellBullet;
     }
 
     public class ChargeRelicBase extends RelicBase {

@@ -25,7 +25,9 @@ import vazkii.psi.common.Psi;
 import vazkii.psi.common.block.tile.TileProgrammer;
 import vazkii.psi.common.core.handler.PlayerDataHandler;
 import vazkii.psi.common.core.handler.PsiSoundHandler;
+import vazkii.psi.common.item.ItemChargeSpellBullet;
 import vazkii.psi.common.item.ItemSpellBullet;
+import vazkii.psi.common.item.base.ModItems;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -97,6 +99,12 @@ public interface IRelic {
         return new TextComponent("\u00a7b" + spell.name).append("\u00a7r (" + new TranslatableComponent(stack.getDescriptionId()).getString() + "\u00a7r)");
     }
 
+    ItemSpellBullet getBulletType();
+
+    default double getCostModifier() {
+        return this.getBulletType().getCostModifier(this.getBulletType().getDefaultInstance());
+    }
+
     default int getRealCost(ItemStack bullet, int cost) {
         return (int) ((double) cost * ((ItemSpellBullet) bullet.getItem()).getCostModifier(bullet));
     }
@@ -110,7 +118,6 @@ public interface IRelic {
         }
 
         var world = player.getCommandSenderWorld();
-        Consumer<SpellContext> predicate = (SpellContext ctx) -> ctx.castFrom = hand;
 
         if (data.overflowed || data.getAvailablePsi() <= 0 || cad.isEmpty() || !ISpellAcceptor.hasSpell(stack) || !isTruePlayer(player)) {
             return Optional.empty();
@@ -119,7 +126,7 @@ public interface IRelic {
         var acceptor = ISpellAcceptor.acceptor(stack);
         var spell = acceptor.getSpell();
         var ctx = new SpellContext().setPlayer(player).setSpell(spell);
-        predicate.accept(ctx);
+        ctx.castFrom = hand;
 
         if (!ctx.isValid()) {
             return Optional.empty();

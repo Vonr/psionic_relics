@@ -74,8 +74,9 @@ public class ProjectileRelic extends Item implements IRelic {
         });
     }
 
-    public double getCostModifier() {
-        return ((ItemProjectileSpellBullet) ModItems.projectileSpellBullet).getCostModifier(ModItems.projectileSpellBullet.getDefaultInstance());
+    @Override
+    public ItemSpellBullet getBulletType() {
+        return (ItemSpellBullet) ModItems.projectileSpellBullet;
     }
 
     public class ProjectileRelicBase extends RelicBase {

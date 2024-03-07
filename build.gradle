@@ -67,6 +67,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 repositories {
     maven { url "https://maven.blamejared.com/" }
     maven { url "https://cursemaven.com" }
+    maven { url = "https://maven.theillusivec4.top/" }
 }
 
 dependencies {
@@ -75,6 +76,9 @@ dependencies {
 
     compileOnly fg.deobf("curse.maven:psi-241665:${psi_cursemaven_tag}")
     runtimeOnly fg.deobf("curse.maven:psi-241665:${psi_cursemaven_tag}")
+
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api")
 
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
 }

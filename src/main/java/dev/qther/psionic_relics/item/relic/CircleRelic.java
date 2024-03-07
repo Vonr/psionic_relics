@@ -76,8 +76,9 @@ public class CircleRelic extends Item implements IRelic {
         });
     }
 
-    public double getCostModifier() {
-        return ((ItemCircleSpellBullet) ModItems.circleSpellBullet).getCostModifier(ModItems.circleSpellBullet.getDefaultInstance());
+    @Override
+    public ItemSpellBullet getBulletType() {
+        return (ItemSpellBullet) ModItems.circleSpellBullet;
     }
 
     public class CircleRelicBase extends RelicBase {

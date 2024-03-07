@@ -73,8 +73,9 @@ public class LoopcastRelic extends Item implements IRelic {
         });
     }
 
-    public double getCostModifier() {
-        return ((ItemLoopcastSpellBullet) ModItems.loopSpellBullet).getCostModifier(ModItems.loopSpellBullet.getDefaultInstance());
+    @Override
+    public ItemSpellBullet getBulletType() {
+        return (ItemSpellBullet) ModItems.loopSpellBullet;
     }
 
     public class LoopcastRelicBase extends RelicBase {
