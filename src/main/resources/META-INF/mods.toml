@@ -11,6 +11,7 @@ displayURL="https://github.com/Vonr/psionic_relics"
 logoFile="logo.png"
 authors="${mod_authors}"
 description='''${mod_description}'''
+credits="silksoul for textures and the Psi Taurus Silver Discord server for advice."
 
 [[dependencies.${mod_id}]]
    modId="forge"
