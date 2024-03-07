@@ -1,0 +1,12 @@
+{
+  "type": "psionic_relics:relic",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/desert_pyramid"
+    }
+  ],
+  "relic": "psionic_relics:mine_relic",
+  "chance": 0.2,
+  "key": "psionic_relics:chests/desert_pyramid"
+}

@@ -1,0 +1,12 @@
+{
+  "type": "psionic_relics:relic",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/woodland_mansion"
+    }
+  ],
+  "relic": "psionic_relics:projectile_relic",
+  "chance": 0.2,
+  "key": "psionic_relics:chests/woodland_mansion"
+}

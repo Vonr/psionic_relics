@@ -1,0 +1,12 @@
+{
+  "type": "psionic_relics:relic",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/simple_dungeon"
+    }
+  ],
+  "relic": "psionic_relics:charge_relic",
+  "chance": 0.1,
+  "key": "psionic_relics:chests/simple_dungeon"
+}

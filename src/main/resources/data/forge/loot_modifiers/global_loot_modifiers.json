@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "entries": [
+    "psionic_relics:chests/abandoned_mineshaft",
+    "psionic_relics:chests/bastion_other",
+    "psionic_relics:chests/bastion_treasure",
+    "psionic_relics:chests/buried_treasure",
+    "psionic_relics:chests/desert_pyramid",
+    "psionic_relics:chests/jungle_temple",
+    "psionic_relics:chests/pillager_outpost",
+    "psionic_relics:chests/shipwreck_treasure",
+    "psionic_relics:chests/simple_dungeon",
+    "psionic_relics:chests/stronghold_library",
+    "psionic_relics:chests/woodland_mansion"
+  ]
+}

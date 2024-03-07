@@ -1,0 +1,12 @@
+{
+  "type": "psionic_relics:relic",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/shipwreck_treasure"
+    }
+  ],
+  "relic": "psionic_relics:basic_relic",
+  "chance": 0.1,
+  "key": "psionic_relics:chests/shipwreck_treasure"
+}

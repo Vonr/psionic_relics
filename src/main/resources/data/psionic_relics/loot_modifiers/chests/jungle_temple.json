@@ -1,0 +1,12 @@
+{
+  "type": "psionic_relics:relic",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/jungle_temple"
+    }
+  ],
+  "relic": "psionic_relics:mine_relic",
+  "chance": 0.5,
+  "key": "psionic_relics:chests/jungle_temple"
+}

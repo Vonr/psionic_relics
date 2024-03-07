@@ -1,0 +1,12 @@
+{
+  "type": "psionic_relics:relic",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/bastion_treasure"
+    }
+  ],
+  "relic": "psionic_relics:grenade_relic",
+  "chance": 0.5,
+  "key": "psionic_relics:chests/bastion_treasure"
+}

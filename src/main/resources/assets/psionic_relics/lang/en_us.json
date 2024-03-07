@@ -1,0 +1,11 @@
+{
+  "key.categories.psi": "Psionic Relics",
+  "itemGroup.psionic_relics": "Psionic Relics",
+  "item.psionic_relics.basic_relic": "\u00a7bSorcerer's Relic",
+  "item.psionic_relics.charge_relic": "\u00a7bTrickster's Relic",
+  "item.psionic_relics.circle_relic": "\u00a7bScribe's Relic",
+  "item.psionic_relics.grenade_relic": "\u00a7bUnstable Relic",
+  "item.psionic_relics.loopcast_relic": "\u00a7bTimekeeper's Relic",
+  "item.psionic_relics.mine_relic": "\u00a7bStrategist's Relic",
+  "item.psionic_relics.projectile_relic": "\u00a7bArcher's Relic"
+}

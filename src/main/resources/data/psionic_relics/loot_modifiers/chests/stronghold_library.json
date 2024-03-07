@@ -1,0 +1,12 @@
+{
+  "type": "psionic_relics:relic",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/stronghold_library"
+    }
+  ],
+  "relic": "psionic_relics:circle_relic",
+  "chance": 0.33,
+  "key": "psionic_relics:chests/stronghold_library"
+}
