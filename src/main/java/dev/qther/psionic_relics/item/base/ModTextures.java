@@ -14,8 +14,7 @@ public class ModTextures extends ItemModelProvider {
     }
 
     private ItemModelBuilder item(RegistryObject<Item> item) {
-        PsionicRelics.LOGGER.info("Registering item/" + item.getId().toString());
-        return singleTexture(item.get().getRegistryName().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/" + item.getId().toString()));
+        return singleTexture(item.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/" + item.getId().toString()));
     }
 
     @Override

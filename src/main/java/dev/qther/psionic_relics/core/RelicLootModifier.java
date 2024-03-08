@@ -1,21 +1,30 @@
 package dev.qther.psionic_relics.core;
 
+import com.google.common.base.Suppliers;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.qther.psionic_relics.item.base.IRelic;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootModifier;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.function.Supplier;
+
 
 public class RelicLootModifier extends LootModifier {
+    public static final Supplier<Codec<RelicLootModifier>> CODEC = Suppliers.memoize(
+            () -> RecordCodecBuilder.create(inst -> codecStart(inst)
+                    .and(ForgeRegistries.ITEMS.getCodec().fieldOf("relic").forGetter(m -> m.relic))
+                    .and(Codec.DOUBLE.fieldOf("chance").forGetter(m -> m.chance))
+                    .apply(inst, RelicLootModifier::new)));
+
     Item relic;
     double chance;
 
@@ -27,7 +36,7 @@ public class RelicLootModifier extends LootModifier {
 
     @NotNull
     @Override
-    protected List<ItemStack> doApply(List<ItemStack> loot, LootContext ctx) {
+    protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> loot, LootContext ctx) {
         if (ctx.getLevel().getRandom().nextDouble() > this.chance) {
             return loot;
         }
@@ -47,21 +56,8 @@ public class RelicLootModifier extends LootModifier {
         return loot;
     }
 
-    public static class Serializer extends GlobalLootModifierSerializer<RelicLootModifier> {
-
-        @Override
-        public RelicLootModifier read(ResourceLocation loc, JsonObject obj, LootItemCondition[] cnd) {
-            Item relic = ForgeRegistries.ITEMS.getValue(new ResourceLocation(GsonHelper.getAsString(obj, "relic")));
-            double chance = GsonHelper.getAsDouble(obj, "chance");
-            return new RelicLootModifier(cnd, relic, chance);
-        }
-
-        @Override
-        public JsonObject write(RelicLootModifier mod) {
-            JsonObject json = makeConditions(mod.conditions);
-            json.addProperty("relic", ForgeRegistries.ITEMS.getKey(mod.relic).toString());
-            json.addProperty("chance", mod.chance);
-            return json;
-        }
+    @Override
+    public Codec<? extends IGlobalLootModifier> codec() {
+        return CODEC.get();
     }
 }

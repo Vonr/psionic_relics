@@ -18,6 +18,6 @@ public class MessageRegistry {
         HANDLER.messageBuilder(MessageRelicCast.class, 0)
                 .encoder((msg, buf) -> {})
                 .decoder((msg) -> new MessageRelicCast())
-                .consumer(MessageRelicCast::receive).add();
+                .consumerMainThread(MessageRelicCast::receive).add();
     }
 }

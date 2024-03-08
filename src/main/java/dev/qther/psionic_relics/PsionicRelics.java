@@ -1,7 +1,10 @@
 package dev.qther.psionic_relics;
 
+import dev.qther.psionic_relics.core.CuriosIntegration;
+import dev.qther.psionic_relics.core.ModLootModifiers;
 import dev.qther.psionic_relics.item.base.ModItems;
 import dev.qther.psionic_relics.network.MessageRegistry;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
@@ -18,13 +21,15 @@ public class PsionicRelics {
     public static boolean HAS_CURIOS = false;
 
     public PsionicRelics() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
+        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        HAS_CURIOS = ModList.get().isLoaded("curios");
+
+        bus.addListener(this::commonSetup);
         ModItems.register();
+        ModLootModifiers.register(bus);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
-        HAS_CURIOS = ModList.get().isLoaded("curios");
-
         MessageRegistry.register();
     }
 }

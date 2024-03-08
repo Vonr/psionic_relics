@@ -4,8 +4,6 @@ import dev.qther.psionic_relics.item.base.IRelic;
 import dev.qther.psionic_relics.item.base.RelicBase;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -27,7 +25,6 @@ import vazkii.psi.api.internal.TooltipHelper;
 import vazkii.psi.api.spell.ISpellAcceptor;
 import vazkii.psi.api.spell.SpellContext;
 import vazkii.psi.common.entity.EntitySpellProjectile;
-import vazkii.psi.common.item.ItemProjectileSpellBullet;
 import vazkii.psi.common.item.ItemSpellBullet;
 import vazkii.psi.common.item.base.ModItems;
 
@@ -68,9 +65,9 @@ public class ProjectileRelic extends Item implements IRelic {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, @Nullable Level playerIn, List<Component> tooltip, TooltipFlag advanced) {
         TooltipHelper.tooltipIfShift(tooltip, () -> {
-            tooltip.add(new TranslatableComponent("psimisc.bullet_type", new TranslatableComponent("psi.bullet_type_projectile")));
-            tooltip.add(new TranslatableComponent("psimisc.bullet_cost", (int) (this.getCostModifier() * 100)));
-            tooltip.add(new TextComponent("\u00a7b" + new TranslatableComponent("psi.cadstat.efficiency").getString()).append("\u00a77: \u00a7r100"));
+            tooltip.add(Component.translatable("psimisc.bullet_type", Component.translatable("psi.bullet_type_projectile")));
+            tooltip.add(Component.translatable("psimisc.bullet_cost", (int) (this.getCostModifier() * 100)));
+            tooltip.add(Component.literal("\u00a7b" + Component.translatable("psi.cadstat.efficiency").getString()).append("\u00a77: \u00a7r100"));
         });
     }
 

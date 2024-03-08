@@ -1,16 +1,16 @@
 package dev.qther.psionic_relics.core;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import dev.qther.psionic_relics.PsionicRelics;
-import dev.qther.psionic_relics.api.RelicCastEvent;
 import dev.qther.psionic_relics.network.MessageRegistry;
 import dev.qther.psionic_relics.network.message.MessageRelicCast;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.ClientRegistry;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
@@ -31,52 +31,61 @@ public class CuriosIntegration {
         InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("psionic_relic").icon(new ResourceLocation("curios:slot/psionic_relic_slot")).size(1).build());
     }
 
-    @Mod.EventBusSubscriber(modid = PsionicRelics.MOD_ID, value = Dist.CLIENT)
     @OnlyIn(Dist.CLIENT)
-    public class KeybindHandler {
+    public static class Keybinds {
         public static KeyMapping cast = new KeyMapping("key.psionic_relics.cast", GLFW_KEY_R, "key.categories.psionic_relics");
-        protected static boolean castWasDown = false;
-        protected static int castDebounce = 0;
 
-        public static void init() {
-            if (!PsionicRelics.HAS_CURIOS) {
-                return;
+        @Mod.EventBusSubscriber(modid = PsionicRelics.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+        @OnlyIn(Dist.CLIENT)
+        static class Registrar {
+            @SubscribeEvent
+            public static void keyRegistration(RegisterKeyMappingsEvent e) {
+                if (!PsionicRelics.HAS_CURIOS) {
+                    return;
+                }
+                e.register(cast);
             }
-            ClientRegistry.registerKeyBinding(cast);
         }
 
-        @SubscribeEvent
-        public static void keyHandler(TickEvent.ClientTickEvent event) {
-            if (event.phase != TickEvent.Phase.START) {
-                return;
-            }
+        @Mod.EventBusSubscriber(modid = PsionicRelics.MOD_ID, value = Dist.CLIENT)
+        @OnlyIn(Dist.CLIENT)
+        public static class Handler {
+            protected static boolean castWasDown = false;
+            protected static int castDebounce = 0;
 
-            Minecraft mc = Minecraft.getInstance();
-
-            if (mc.player == null || mc.screen != null) {
-                return;
-            }
-
-            if (KeybindHandler.cast.isDown()) {
-                if (castDebounce > 0) {
-                    castDebounce--;
+            @SubscribeEvent
+            public static void keyHandler(TickEvent.ClientTickEvent event) {
+                if (event.phase != TickEvent.Phase.START || !PsionicRelics.HAS_CURIOS) {
                     return;
                 }
 
-                var relics = CuriosApi.getCuriosHelper().findCurios(mc.player, "psionic_relic");
-                if (relics.size() < 1) {
+                Minecraft mc = Minecraft.getInstance();
+
+                if (mc.player == null || mc.screen != null) {
                     return;
                 }
 
-                if (!KeybindHandler.castWasDown) {
-                    castDebounce = 2;
-                    KeybindHandler.castWasDown = true;
-                }
+                if (CuriosIntegration.Keybinds.cast.isDown()) {
+                    if (castDebounce > 0) {
+                        castDebounce--;
+                        return;
+                    }
 
-                MessageRegistry.HANDLER.sendToServer(new MessageRelicCast());
-            } else {
-                KeybindHandler.castWasDown = false;
-                castDebounce = 0;
+                    var relics = CuriosApi.getCuriosHelper().findCurios(mc.player, "psionic_relic");
+                    if (relics.size() < 1) {
+                        return;
+                    }
+
+                    if (!castWasDown) {
+                        castDebounce = 2;
+                        castWasDown = true;
+                    }
+
+                    MessageRegistry.HANDLER.sendToServer(new MessageRelicCast());
+                } else {
+                    castWasDown = false;
+                    castDebounce = 0;
+                }
             }
         }
     }

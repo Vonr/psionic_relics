@@ -4,8 +4,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -30,6 +28,7 @@ import vazkii.psi.common.item.ItemSpellBullet;
 import vazkii.psi.common.item.base.ModItems;
 
 import javax.annotation.Nonnull;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
@@ -63,7 +62,7 @@ public interface IRelic {
         if (enabled && !programmer.playerLock.isEmpty()) {
             if (!programmer.playerLock.equals(playerIn.getName().getString())) {
                 if (!worldIn.isClientSide) {
-                    playerIn.sendMessage(new TranslatableComponent("psimisc.not_your_programmer").setStyle(Style.EMPTY.withColor(ChatFormatting.RED)), UUID.randomUUID());
+                    playerIn.sendSystemMessage(Component.translatable("psimisc.not_your_programmer").setStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
                 }
                 return InteractionResult.FAIL;
             }
@@ -93,10 +92,10 @@ public interface IRelic {
     default Component getRelicName(@Nonnull ItemStack stack) {
         var spell = ISpellAcceptor.acceptor(stack).getSpell();
         if (spell == null) {
-            return new TranslatableComponent(stack.getDescriptionId());
+            return Component.translatable(stack.getDescriptionId());
         }
 
-        return new TextComponent("\u00a7b" + spell.name).append("\u00a7r (" + new TranslatableComponent(stack.getDescriptionId()).getString() + "\u00a7r)");
+        return Component.literal("\u00a7b" + spell.name).append("\u00a7r (" + Component.translatable(stack.getDescriptionId()).getString() + "\u00a7r)");
     }
 
     ItemSpellBullet getBulletType();
@@ -134,7 +133,7 @@ public interface IRelic {
 
         if (!ctx.cspell.metadata.evaluateAgainst(cad)) {
             if (!world.isClientSide) {
-                player.sendMessage((new TranslatableComponent("psimisc.weak_cad")).setStyle(Style.EMPTY.withColor(ChatFormatting.RED)), Util.NIL_UUID);
+                player.sendSystemMessage((Component.translatable("psimisc.weak_cad")).setStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
             }
 
             return Optional.empty();
@@ -150,7 +149,7 @@ public interface IRelic {
         if (MinecraftForge.EVENT_BUS.post(event)) {
             var cancelMessage = event.getCancellationMessage();
             if (cancelMessage != null && !cancelMessage.isEmpty()) {
-                player.sendMessage((new TranslatableComponent(cancelMessage)).setStyle(Style.EMPTY.withColor(ChatFormatting.RED)), Util.NIL_UUID);
+                player.sendSystemMessage((Component.translatable(cancelMessage)).setStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
             }
 
             return Optional.empty();
