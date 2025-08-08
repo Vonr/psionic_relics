@@ -1,13 +1,16 @@
 package dev.qther.psionic_relics.item.base;
 
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import dev.qther.psionic_relics.setup.PRRegistry;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
+import net.neoforged.neoforge.capabilities.ICapabilityProvider;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import vazkii.psi.api.PsiAPI;
 import vazkii.psi.api.cad.IPsiBarDisplay;
 import vazkii.psi.api.internal.IPlayerData;
@@ -15,32 +18,18 @@ import vazkii.psi.api.spell.ISpellAcceptor;
 import vazkii.psi.api.spell.Spell;
 import vazkii.psi.api.spell.SpellContext;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 
-public class RelicBase implements ICapabilityProvider, IPsiBarDisplay, ISpellAcceptor {
+public class RelicBase implements ICapabilityProvider<Object, Void, Object>, IPsiBarDisplay, ISpellAcceptor {
     protected ItemStack relic;
-    protected LazyOptional<?> capOptional;
 
     public RelicBase(ItemStack relic) {
         this.relic = relic;
-        this.capOptional = LazyOptional.of(() -> this);
-    }
-
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if (cap == PsiAPI.PSI_BAR_DISPLAY_CAPABILITY
-                || cap == PsiAPI.SPELL_ACCEPTOR_CAPABILITY) {
-            return capOptional.cast();
-        }
-        return LazyOptional.empty();
     }
 
     @Override
     public boolean shouldShow(IPlayerData data) {
-        return false;
+        return true;
     }
 
     @Override
@@ -49,33 +38,23 @@ public class RelicBase implements ICapabilityProvider, IPsiBarDisplay, ISpellAcc
             return;
         }
 
-        var name = IRelic.TAG_SPELL;
-        var cmp = new CompoundTag();
-
-        spell.writeToNBT(cmp);
-
-        relic.getOrCreateTag().put(name, cmp);
+        relic.set(PRRegistry.Data.RELIC, new RelicData(spell));
     }
 
     @Nullable
     @Override
     public Spell getSpell() {
-        var name = IRelic.TAG_SPELL;
-        var cmp = relic.getOrCreateTag().getCompound(name);
-
-        if (cmp.isEmpty()) {
+        var cmp = relic.get(PRRegistry.Data.RELIC);
+        if (cmp == null) {
             return null;
         }
 
-        return Spell.createFromNBT(cmp);
+        return cmp.spell();
     }
 
     @Override
     public boolean containsSpell() {
-        var name = IRelic.TAG_SPELL;
-        var cmp = relic.getOrCreateTag().getCompound(name);
-
-        return !cmp.isEmpty();
+        return relic.has(PRRegistry.Data.RELIC);
     }
 
     @Override
@@ -87,5 +66,25 @@ public class RelicBase implements ICapabilityProvider, IPsiBarDisplay, ISpellAcc
     @Override
     public boolean castableFromSocket() {
         return false;
+    }
+
+    @Override
+    public @Nullable Object getCapability(@NotNull Object cap, Void context) {
+        if (cap == PsiAPI.SPELL_ACCEPTOR_CAPABILITY || cap == PsiAPI.PSI_BAR_DISPLAY_CAPABILITY) {
+            return this;
+        }
+
+        return null;
+    }
+
+    public record RelicData(Spell spell) {
+        public static final Codec<RelicData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Spell.CODEC.fieldOf("spell").forGetter(RelicData::spell)
+        ).apply(instance, RelicData::new));
+
+        public static final StreamCodec<RegistryFriendlyByteBuf, RelicData> STREAM_CODEC = StreamCodec.composite(
+                Spell.STREAM_CODEC, RelicData::spell,
+                RelicData::new
+        );
     }
 }

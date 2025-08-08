@@ -1,0 +1,11 @@
+{
+  "type": "psionic_relics:relic",
+  "chance": 0.1,
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:chests/abandoned_mineshaft"
+    }
+  ],
+  "relic": "psionic_relics:basic_relic"
+}

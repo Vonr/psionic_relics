@@ -1,35 +1,42 @@
 package dev.qther.psionic_relics;
 
-import dev.qther.psionic_relics.core.CuriosIntegration;
-import dev.qther.psionic_relics.core.ModLootModifiers;
-import dev.qther.psionic_relics.item.base.ModItems;
-import dev.qther.psionic_relics.network.MessageRegistry;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.Mod;
+import dev.qther.psionic_relics.datagen.PRDatagen;
+import dev.qther.psionic_relics.network.PRNetworking;
+import dev.qther.psionic_relics.setup.CuriosIntegration;
+import dev.qther.psionic_relics.setup.PRCapabilities;
+import dev.qther.psionic_relics.setup.PRRegistry;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.common.NeoForge;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-@Mod(PsionicRelics.MOD_ID)
+@Mod(PsionicRelics.MODID)
 public class PsionicRelics {
-    public static final String MOD_ID = "psionic_relics";
-    public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+    public static final String MODID = "psionic_relics";
+    public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
     public static boolean HAS_CURIOS = false;
 
-    public PsionicRelics() {
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+    public PsionicRelics(IEventBus bus, ModContainer container) {
         HAS_CURIOS = ModList.get().isLoaded("curios");
+        if (HAS_CURIOS) {
+            if (FMLEnvironment.dist.isClient()) {
+                bus.addListener(CuriosIntegration.Keybinds.Registrar::keyRegistration);
+                NeoForge.EVENT_BUS.addListener(CuriosIntegration.Keybinds.Handler::keyHandler);
+            }
+        }
 
-        bus.addListener(this::commonSetup);
-        ModItems.register();
-        ModLootModifiers.register(bus);
+        bus.addListener(PRDatagen::gatherData);
+        bus.addListener(PRCapabilities::register);
+        bus.addListener(PRNetworking::register);
+        PRRegistry.register(bus);
     }
 
-    private void commonSetup(FMLCommonSetupEvent event) {
-        MessageRegistry.register();
+    public static ResourceLocation prefix(String path) {
+        return ResourceLocation.fromNamespaceAndPath(MODID, path);
     }
 }

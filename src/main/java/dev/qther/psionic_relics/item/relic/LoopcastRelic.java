@@ -2,7 +2,6 @@ package dev.qther.psionic_relics.item.relic;
 
 import dev.qther.psionic_relics.item.base.IRelic;
 import dev.qther.psionic_relics.item.base.RelicBase;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -15,10 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
+import org.jetbrains.annotations.NotNull;
 import vazkii.psi.api.internal.TooltipHelper;
 import vazkii.psi.api.spell.SpellContext;
 import vazkii.psi.common.core.handler.LoopcastTrackingHandler;
@@ -26,8 +22,6 @@ import vazkii.psi.common.core.handler.PlayerDataHandler;
 import vazkii.psi.common.item.ItemSpellBullet;
 import vazkii.psi.common.item.base.ModItems;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,37 +30,32 @@ public class LoopcastRelic extends Item implements IRelic {
         super(properties.stacksTo(1));
     }
 
-    @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
+    public @NotNull RelicBase getRelicBase(ItemStack stack) {
         return new LoopcastRelicBase(stack);
     }
 
-    @Nonnull
     @Override
-    public InteractionResult useOn(@Nonnull UseOnContext ctx) {
+    public @NotNull InteractionResult useOn(@NotNull UseOnContext ctx) {
         return this.relicUseOn(ctx);
     }
 
-    @Nonnull
     @Override
-    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, @Nonnull InteractionHand hand) {
+    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level worldIn, @NotNull Player playerIn, @NotNull InteractionHand hand) {
         return this.relicUse(worldIn, playerIn, hand, 0, 0, (ItemSpellBullet) ModItems.loopSpellBullet);
     }
 
     @Override
-    public @Nonnull Component getName(@Nonnull ItemStack stack) {
+    public @NotNull Component getName(@NotNull ItemStack stack) {
         return this.getRelicName(stack);
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, @Nullable Level playerIn, List<Component> tooltip, TooltipFlag advanced) {
-        tooltip.add(Component.literal("\u00a74\u00a7oCreative only, broken."));
-        TooltipHelper.tooltipIfShift(tooltip, () -> {
-            tooltip.add(Component.translatable("psimisc.bullet_type", Component.translatable("psi.bullet_type_loopcast")));
-            tooltip.add(Component.translatable("psimisc.bullet_cost", (int) (this.getCostModifier() * 100)));
-            tooltip.add(Component.literal("\u00a7b" + Component.translatable("psi.cadstat.efficiency").getString()).append("\u00a77: \u00a7r100"));
+    public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, @NotNull List<Component> tooltipComponents, @NotNull TooltipFlag tooltipFlag) {
+        TooltipHelper.tooltipIfShift(tooltipComponents, () -> {
+            tooltipComponents.add(Component.translatable("psimisc.bullet_type", Component.translatable("psi.loopcasting")));
+            tooltipComponents.add(Component.translatable("psimisc.bullet_cost", (int) (this.getCostModifier() * 100)));
+            tooltipComponents.add(Component.literal("\u00a7b" + Component.translatable("psi.cadstat.efficiency").getString()).append("\u00a77: \u00a7r100"));
         });
     }
 
@@ -75,10 +64,9 @@ public class LoopcastRelic extends Item implements IRelic {
         return (ItemSpellBullet) ModItems.loopSpellBullet;
     }
 
-    public class LoopcastRelicBase extends RelicBase {
+    public static class LoopcastRelicBase extends RelicBase {
         public LoopcastRelicBase(ItemStack relic) {
             super(relic);
-            this.capOptional = LazyOptional.of(() -> this);
         }
 
         @Override

@@ -1,8 +1,7 @@
 package dev.qther.psionic_relics.item.relic;
 
-import dev.qther.psionic_relics.item.base.RelicBase;
 import dev.qther.psionic_relics.item.base.IRelic;
-import net.minecraft.nbt.CompoundTag;
+import dev.qther.psionic_relics.item.base.RelicBase;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -13,15 +12,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import org.jetbrains.annotations.NotNull;
 import vazkii.psi.api.internal.TooltipHelper;
 import vazkii.psi.common.item.ItemSpellBullet;
 import vazkii.psi.common.item.base.ModItems;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class BasicRelic extends Item implements IRelic {
@@ -29,41 +24,39 @@ public class BasicRelic extends Item implements IRelic {
         super(properties.stacksTo(1));
     }
 
-    @Nullable
+    @NotNull
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return new RelicBase(stack);
-    }
-
-    @Nonnull
-    @Override
-    public InteractionResult useOn(@Nonnull UseOnContext ctx) {
+    public InteractionResult useOn(@NotNull UseOnContext ctx) {
         return this.relicUseOn(ctx);
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, @Nonnull InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(@NotNull Level worldIn, @NotNull Player playerIn, @NotNull InteractionHand hand) {
         return this.relicUse(worldIn, playerIn, hand, 0, 0, this.getBulletType());
     }
 
     @Override
-    public @Nonnull Component getName(@Nonnull ItemStack stack) {
+    public @NotNull Component getName(@NotNull ItemStack stack) {
         return this.getRelicName(stack);
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, @Nullable Level playerIn, List<Component> tooltip, TooltipFlag advanced) {
-        TooltipHelper.tooltipIfShift(tooltip, () -> {
-            tooltip.add(Component.translatable("psimisc.bullet_type", Component.translatable("psi.bullet_type_basic")));
-            tooltip.add(Component.translatable("psimisc.bullet_cost", 100));
-            tooltip.add(Component.literal("\u00a7b" + Component.translatable("psi.cadstat.efficiency").getString()).append("\u00a77: \u00a7r100"));
+    public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, @NotNull List<Component> tooltipComponents, @NotNull TooltipFlag tooltipFlag) {
+        TooltipHelper.tooltipIfShift(tooltipComponents, () -> {
+            tooltipComponents.add(Component.translatable("psimisc.bullet_type", Component.translatable("psi.bullet_type_basic")));
+            tooltipComponents.add(Component.translatable("psimisc.bullet_cost", 100));
+            tooltipComponents.add(Component.literal("\u00a7b" + Component.translatable("psi.cadstat.efficiency").getString()).append("\u00a77: \u00a7r100"));
         });
     }
 
     @Override
     public ItemSpellBullet getBulletType() {
         return (ItemSpellBullet) ModItems.spellBullet;
+    }
+
+    @Override
+    public @NotNull RelicBase getRelicBase(ItemStack stack) {
+        return new RelicBase(stack);
     }
 }

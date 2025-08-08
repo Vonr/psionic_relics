@@ -1,0 +1,11 @@
+{
+  "type": "psionic_relics:relic",
+  "chance": 0.33,
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:chests/desert_pyramid"
+    }
+  ],
+  "relic": "psionic_relics:mine_relic"
+}

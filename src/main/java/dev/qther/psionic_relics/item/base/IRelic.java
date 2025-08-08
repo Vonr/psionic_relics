@@ -1,7 +1,6 @@
 package dev.qther.psionic_relics.item.base;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.sounds.SoundSource;
@@ -13,7 +12,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.common.NeoForge;
+import org.jetbrains.annotations.NotNull;
 import vazkii.psi.api.PsiAPI;
 import vazkii.psi.api.internal.PsiRenderHelper;
 import vazkii.psi.api.internal.VanillaPacketDispatcher;
@@ -23,24 +23,16 @@ import vazkii.psi.common.Psi;
 import vazkii.psi.common.block.tile.TileProgrammer;
 import vazkii.psi.common.core.handler.PlayerDataHandler;
 import vazkii.psi.common.core.handler.PsiSoundHandler;
-import vazkii.psi.common.item.ItemChargeSpellBullet;
 import vazkii.psi.common.item.ItemSpellBullet;
-import vazkii.psi.common.item.base.ModItems;
 
-import javax.annotation.Nonnull;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.UUID;
-import java.util.function.Consumer;
 
 import static vazkii.psi.common.item.ItemCAD.isTruePlayer;
 
 public interface IRelic {
-    String TAG_SPELL = "spell";
-
-    @Nonnull
-    default InteractionResult relicUseOn(@Nonnull UseOnContext ctx) {
+    @NotNull
+    default InteractionResult relicUseOn(@NotNull UseOnContext ctx) {
         var playerIn = ctx.getPlayer();
         var hand = ctx.getHand();
         var worldIn = ctx.getLevel();
@@ -80,19 +72,19 @@ public interface IRelic {
         return InteractionResult.SUCCESS;
     }
 
-    @Nonnull
-    default InteractionResultHolder<ItemStack> relicUse(Level worldIn, Player playerIn, @Nonnull InteractionHand hand, int reservoir, int cd, ItemSpellBullet bullet) {
+    @NotNull
+    default InteractionResultHolder<ItemStack> relicUse(Level worldIn, Player playerIn, @NotNull InteractionHand hand, int reservoir, int cd, ItemSpellBullet bullet) {
         var stack = playerIn.getItemInHand(hand);
         var did = cast(stack, playerIn, hand, reservoir, cd, bullet).isPresent();
 
         return new InteractionResultHolder<>(did ? InteractionResult.CONSUME : InteractionResult.PASS, stack);
     }
 
-    @Nonnull
-    default Component getRelicName(@Nonnull ItemStack stack) {
+    @NotNull
+    default Component getRelicName(@NotNull ItemStack stack) {
         var spell = ISpellAcceptor.acceptor(stack).getSpell();
         if (spell == null) {
-            return Component.translatable(stack.getDescriptionId());
+            return Component.translatable(stack.getDescriptionId()).withStyle(ChatFormatting.AQUA);
         }
 
         return Component.literal("\u00a7b" + spell.name).append("\u00a7r (" + Component.translatable(stack.getDescriptionId()).getString() + "\u00a7r)");
@@ -101,7 +93,8 @@ public interface IRelic {
     ItemSpellBullet getBulletType();
 
     default double getCostModifier() {
-        return this.getBulletType().getCostModifier(this.getBulletType().getDefaultInstance());
+        var bulletType = this.getBulletType();
+        return bulletType.getCostModifier(bulletType.getDefaultInstance());
     }
 
     default int getRealCost(ItemStack bullet, int cost) {
@@ -146,7 +139,7 @@ public interface IRelic {
         var particles = 10;
         var sound = 0.05F;
         var event = new PreSpellCastEvent(cost, sound, particles, cd, spell, ctx, player, data, cad, bullet);
-        if (MinecraftForge.EVENT_BUS.post(event)) {
+        if (NeoForge.EVENT_BUS.post(event).isCanceled()) {
             var cancelMessage = event.getCancellationMessage();
             if (cancelMessage != null && !cancelMessage.isEmpty()) {
                 player.sendSystemMessage((Component.translatable(cancelMessage)).setStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
@@ -176,7 +169,7 @@ public interface IRelic {
 
                 for (var i = 0; i < particles; ++i) {
                     var x = player.getX() + (Math.random() - 0.5) * 2.1 * (double) player.getBbWidth();
-                    var y = player.getY() - player.getMyRidingOffset();
+                    var y = player.getY() + 0.35D;
                     var z = player.getZ() + (Math.random() - 0.5) * 2.1 * (double) player.getBbWidth();
                     var grav = -0.15F - (float) Math.random() * 0.03F;
                     Psi.proxy.sparkleFX(x, y, z, r, g, b, grav, 0.25F, 15);
@@ -204,8 +197,9 @@ public interface IRelic {
             spellEntities = acceptor.castSpell(ctx);
         }
 
-        MinecraftForge.EVENT_BUS.post(new SpellCastEvent(spell, ctx, player, data, cad, bullet));
+        NeoForge.EVENT_BUS.post(new SpellCastEvent(spell, ctx, player, data, cad, bullet));
         return Optional.of(spellEntities);
     }
 
+    @NotNull RelicBase getRelicBase(ItemStack stack);
 }

@@ -1,0 +1,16 @@
+{
+  "entries": [
+    "psionic_relics:relics/basic_relic/minecraft/chests/abandoned_mineshaft",
+    "psionic_relics:relics/basic_relic/minecraft/chests/shipwreck_treasure",
+    "psionic_relics:relics/basic_relic/minecraft/chests/buried_treasure",
+    "psionic_relics:relics/grenade_relic/minecraft/chests/bastion_other",
+    "psionic_relics:relics/grenade_relic/minecraft/chests/bastion_treasure",
+    "psionic_relics:relics/mine_relic/minecraft/chests/desert_pyramid",
+    "psionic_relics:relics/mine_relic/minecraft/chests/jungle_temple",
+    "psionic_relics:relics/projectile_relic/psionic_relics/chests/woodland_mansion",
+    "psionic_relics:relics/projectile_relic/minecraft/chests/pillager_outpost",
+    "psionic_relics:relics/charge_relic/minecraft/chests/simple_dungeon",
+    "psionic_relics:relics/circle_relic/minecraft/chests/stronghold_library"
+  ],
+  "replace": false
+}
