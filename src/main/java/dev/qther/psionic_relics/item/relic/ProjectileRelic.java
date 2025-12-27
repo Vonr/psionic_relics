@@ -44,7 +44,7 @@ public class ProjectileRelic extends Item implements IRelic {
 
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level worldIn, @NotNull Player playerIn, @NotNull InteractionHand hand) {
-        return this.relicUse(worldIn, playerIn, hand, 0, 0, (ItemSpellBullet) ModItems.projectileSpellBullet);
+        return this.relicUse(worldIn, playerIn, hand, 0, 0, ModItems.projectileSpellBullet.get());
     }
 
     @Override
@@ -64,7 +64,7 @@ public class ProjectileRelic extends Item implements IRelic {
 
     @Override
     public ItemSpellBullet getBulletType() {
-        return (ItemSpellBullet) ModItems.projectileSpellBullet;
+        return ModItems.projectileSpellBullet.get();
     }
 
     public class ProjectileRelicBase extends RelicBase {

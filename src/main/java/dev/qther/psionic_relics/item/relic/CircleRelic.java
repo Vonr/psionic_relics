@@ -45,7 +45,7 @@ public class CircleRelic extends Item implements IRelic {
 
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level worldIn, @NotNull Player playerIn, @NotNull InteractionHand hand) {
-        return this.relicUse(worldIn, playerIn, hand, 0, 0, (ItemSpellBullet) ModItems.circleSpellBullet);
+        return this.relicUse(worldIn, playerIn, hand, 0, 0, ModItems.circleSpellBullet.get());
     }
 
     @Override
@@ -64,7 +64,7 @@ public class CircleRelic extends Item implements IRelic {
 
     @Override
     public ItemSpellBullet getBulletType() {
-        return (ItemSpellBullet) ModItems.circleSpellBullet;
+        return ModItems.circleSpellBullet.get();
     }
 
     public static class CircleRelicBase extends RelicBase {

@@ -52,7 +52,7 @@ public class BasicRelic extends Item implements IRelic {
 
     @Override
     public ItemSpellBullet getBulletType() {
-        return (ItemSpellBullet) ModItems.spellBullet;
+        return ModItems.spellBullet.get();
     }
 
     @Override

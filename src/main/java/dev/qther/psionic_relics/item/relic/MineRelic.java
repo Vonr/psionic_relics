@@ -44,7 +44,7 @@ public class MineRelic extends Item implements IRelic {
 
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level worldIn, @NotNull Player playerIn, @NotNull InteractionHand hand) {
-        return this.relicUse(worldIn, playerIn, hand, 0, 0, (ItemSpellBullet) ModItems.mineSpellBullet);
+        return this.relicUse(worldIn, playerIn, hand, 0, 0, ModItems.mineSpellBullet.get());
     }
 
     @Override
@@ -63,7 +63,7 @@ public class MineRelic extends Item implements IRelic {
 
     @Override
     public ItemSpellBullet getBulletType() {
-        return (ItemSpellBullet) ModItems.mineSpellBullet;
+        return ModItems.mineSpellBullet.get();
     }
 
     public static class MineRelicBase extends RelicBase {

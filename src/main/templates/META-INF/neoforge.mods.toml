@@ -53,7 +53,7 @@ side="BOTH"
 [[dependencies."${mod_id}"]]
 modId="psi"
 type="required"
-versionRange="[2.0.0,)"
+versionRange="[1.21-1076,)"
 ordering="AFTER"
 side="BOTH"
     [dependencies."${mod_id}".mc-publish]

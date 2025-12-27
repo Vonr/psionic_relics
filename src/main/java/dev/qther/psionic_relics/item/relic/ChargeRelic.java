@@ -46,7 +46,7 @@ public class ChargeRelic extends Item implements IRelic {
     @NotNull
     @Override
     public InteractionResultHolder<ItemStack> use(@NotNull Level worldIn, @NotNull Player playerIn, @NotNull InteractionHand hand) {
-        return this.relicUse(worldIn, playerIn, hand, 0, 0, (ItemSpellBullet) ModItems.chargeSpellBullet);
+        return this.relicUse(worldIn, playerIn, hand, 0, 0, ModItems.chargeSpellBullet.get());
     }
 
     @Override
@@ -65,7 +65,7 @@ public class ChargeRelic extends Item implements IRelic {
 
     @Override
     public ItemSpellBullet getBulletType() {
-        return (ItemSpellBullet) ModItems.chargeSpellBullet;
+        return ModItems.chargeSpellBullet.get();
     }
 
     public static class ChargeRelicBase extends RelicBase {

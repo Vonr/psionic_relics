@@ -42,7 +42,7 @@ public class LoopcastRelic extends Item implements IRelic {
 
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level worldIn, @NotNull Player playerIn, @NotNull InteractionHand hand) {
-        return this.relicUse(worldIn, playerIn, hand, 0, 0, (ItemSpellBullet) ModItems.loopSpellBullet);
+        return this.relicUse(worldIn, playerIn, hand, 0, 0, ModItems.loopSpellBullet.get());
     }
 
     @Override
@@ -61,7 +61,7 @@ public class LoopcastRelic extends Item implements IRelic {
 
     @Override
     public ItemSpellBullet getBulletType() {
-        return (ItemSpellBullet) ModItems.loopSpellBullet;
+        return ModItems.loopSpellBullet.get();
     }
 
     public static class LoopcastRelicBase extends RelicBase {
