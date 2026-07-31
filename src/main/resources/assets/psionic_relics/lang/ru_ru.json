@@ -1,0 +1,13 @@
+{
+  "curios.identifier.psionic_relic": "Псионическая реликвия",
+  "item.psionic_relics.basic_relic": "Реликвия чародея",
+  "item.psionic_relics.charge_relic": "Реликвия трикстера",
+  "item.psionic_relics.circle_relic": "Реликвия писца",
+  "item.psionic_relics.grenade_relic": "Нестабильная реликвия",
+  "item.psionic_relics.loopcast_relic": "Реликвия хранителя времени",
+  "item.psionic_relics.mine_relic": "Реликвия стратега",
+  "item.psionic_relics.projectile_relic": "Реликвия лучника",
+  "itemGroup.psionic_relics": "Псионические реликвии",
+  "key.categories.psionic_relics": "Псионические реликвии",
+  "key.psionic_relics.cast": "Использовать реликвию"
+}
